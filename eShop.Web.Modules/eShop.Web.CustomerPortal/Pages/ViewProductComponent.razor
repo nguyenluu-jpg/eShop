@@ -1,0 +1,81 @@
+@page "/product/{id:int}" 
+@rendermode InteractiveServer
+@inject NavigationManager navigationManager
+
+@inject IViewProductUseCase viewProdct
+@inject IAddProductToCartUseCase addProductToCartUseCase
+
+<h3>Product Details</h3>
+
+@* Tạo khung hiển thị sản phẩm
+	<div>
+	<img src="@product.ImageLink" />
+	@product.Name
+	@product.Brand
+	@product.Price.ToString()
+	<br />
+	<br />
+	@product.Description
+</div>
+*@
+
+@if (product != null)
+{
+    <div class="container my-4" style="max-width: 900px;">
+        <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+            <div class="card-body p-4">
+                <div class="row align-items-center g-4">
+
+                    <div class="col-md-5 d-flex align-items-center justify-content-start pe-md-4">
+                        <img src="@product.ImageLink" class="img-fluid rounded"
+                             style="max-height: 300px; width: 100%; object-fit: contain;" alt="@product.Name" />
+                    </div>
+                    @*Bên phải: Thông tin chi tiết*@
+                    <div class="col-md-7">
+                        <h4 class="card-title fw-bold mb-1 text-dark">@product.Name</h4>
+                        <h6 class="card-subtitle mb-3 text-uppercase text-muted fw-semibold small">@product.Brand</h6>
+                        
+                        <div class="p-3 bg-light rounded-3 mb-3">
+                            <span class="fs-5 fw-bold text-secondary me-2">Price:</span>
+                            <label class="fs-4 fw-bold text-danger mb-0">@product.Price.ToString("c")</label>
+                        </div>
+
+                        <p class="card-text text-secondary lh-base">@product.Description</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary mt-3" @onclick="AddToCart">Add to Cart</button>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning mt-4">
+        Product not found or loading...
+    </div>
+}
+<NavLink class="btn btn-link" href="/products">Back to Product Page</NavLink>
+
+
+@code {
+    private Product product;
+
+    [Parameter] // truyền trang này sang trang kia
+    public int Id { get; set; } // tạo ra id
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (Id > 0)
+            product = viewProdct.Execute(Id);
+
+    }
+    private async Task AddToCart()
+    {
+        if (product != null)
+        {
+            await addProductToCartUseCase.Execute(product.ProductId);
+            navigationManager.NavigateTo("/");
+        }
+    }
+}

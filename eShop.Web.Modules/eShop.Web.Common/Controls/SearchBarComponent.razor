@@ -1,0 +1,24 @@
+<div class="row g-2 align-items-center" style="max-width: 450px;">
+    <label for="filter" class="col-auto fw-semibold">Search:</label>
+
+    <div class="col">
+        <input type="text" class="form-control" id="filter" placeholder="Nhập từ khóa..." @bind-value="filter" @bind-value:event="oninput" />
+    </div>
+
+    <div class="col-auto">
+        <button type="button" class="btn btn-primary" @onclick="HandleSearch">
+            Search
+        </button>
+    </div>
+</div>
+@code {
+    private string filter = " ";
+
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+
+    private void HandleSearch()
+    {
+        OnSearch.InvokeAsync(filter);
+    }
+}

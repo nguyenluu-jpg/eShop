@@ -1,0 +1,66 @@
+@*<div class="navbar navbar-expand-lg navbar-dark bg-dark">
+   <ul class="navbar-nav w-100">
+      <li class="nav-item">
+           <NavLink class="navbar-brand" href="/">eShop</NavLink>
+      </li>
+
+        <li class="nav-item ml-auto">
+            <NavLink class="nav-link" href="cart">
+                <eShop.Web.CustomerPortal.Controls.CartComponent>
+
+                </eShop.Web.CustomerPortal.Controls.CartComponent>
+            </NavLink>
+        </li>
+   </ul>
+</div>*@
+
+
+<div class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <ul class="navbar-nav w-100">
+
+        <li class="nav-item">
+            <a class="navbar-brand" href="/">
+                eShop
+            </a>
+        </li>
+
+        <AuthorizeView>
+            <Authorized>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="outstandingorders">
+                        Outstanding Orders
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="processedorders">
+                        Processed Orders
+                    </a>
+                </li>
+
+            </Authorized>
+        </AuthorizeView>
+
+        <li class="nav-item ms-auto d-flex align-items-center">
+
+            <AuthorizeView>
+                <Authorized>
+                    <NavLink class="nav-link" href="/logout">
+                        Sign Out
+                    </NavLink>
+                </Authorized>
+            </AuthorizeView>
+
+            <NavLink class="nav-link" href="cart">
+                <eShop.Web.CustomerPortal.Controls.CartComponent />
+            </NavLink>
+
+        </li>
+
+    </ul>
+</div>
+
+@code {
+
+}

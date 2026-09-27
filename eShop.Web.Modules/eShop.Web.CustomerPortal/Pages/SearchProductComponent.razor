@@ -1,0 +1,117 @@
+@page "/"
+
+@page "/products"
+@rendermode InteractiveServer
+
+@inject ISearchProductUseCase searchProduct
+
+<h3>Search Product Component</h3>
+
+<SearchBarComponent OnSearch="HandleSearch" />
+
+<br />
+
+@*<ul>
+    @foreach (var prod in products)
+    {
+        <li>@prod.Name</li>
+    }
+</ul>
+@filter_samle
+
+<table class="table table-hover table-striped align-middle border shadow-sm rounded-3 overflow-hidden">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Brand
+            </th>
+            <th>
+                Price
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(products != null && products.Count()>0)
+        {
+            @foreach (var prob in products)
+            {
+                <ProductItemComponent Product="prob"></ProductItemComponent>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">
+                    cannot find products
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<table class="table table-hover align-middle border-0 shadow-sm rounded-3 overflow-hidden">
+    <thead class="bg-info bg-gradient text-dark">
+        <tr>
+            <th scope="col" class="py-3 ps-3 border-0 fw-bold">Name</th>
+            <th scope="col" class="py-3 border-0 fw-bold">Brand</th>
+            <th scope="col" class="py-3 pe-3 border-0 fw-bold">Price</th>
+        </tr>
+    </thead>
+    <tbody class="bg-white">
+        @if (products != null && products.Any())
+        {
+            @foreach (var prod in products)
+            {
+                <ProductItemComponent Product="prod"></ProductItemComponent>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3" class="text-center py-5 text-secondary">
+                    <div class="d-flex flex-column align-items-center gap-2">
+                        <i class="bi bi-inbox fs-1 text-muted"></i>
+                        <span class="fw-medium">Cannot find products</span>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>*@
+
+@if (products != null & products.Count() > 0)
+{
+    <div class="row">
+        @foreach(var product in products)
+        {
+            <ProductCardComponent product="product"></ProductCardComponent>
+        }
+    </div>
+}
+else
+{
+    <text>No Products Found.</text>
+}
+
+
+@code {
+    private IEnumerable<Product> products;     // Danh sách sản phẩm
+
+    protected override void OnInitialized() // Khi mở trang, lấy tất cả sản phẩm
+    {
+        base.OnInitialized();
+        products = searchProduct.Execute(""); 
+    }
+
+    // Khi bấm nút Search
+    private void HandleSearch(string filter)
+    {
+        products = searchProduct.Execute(filter);
+        // products = searchProduct.Execute(filter);
+        // products = searchProduct.Execute("");
+    }
+}
