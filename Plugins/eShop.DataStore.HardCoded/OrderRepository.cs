@@ -70,5 +70,10 @@ namespace eShop.DataStore.HardCoded
         {
             throw new NotImplementedException();
         }
-    }
+
+		IEnumerable<OrderLineItem> IOrderRepository.GetLineItemsByOrderId(int orderId)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

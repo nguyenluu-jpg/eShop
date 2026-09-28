@@ -1,4 +1,5 @@
-using eShop.DataStore.HardCoded;
+// using eShop.DataStore.HardCoded;
+using eShop.DataStore.SQL.Dapper;
 using eShop.UseCases.PluginInterfaces.DataStore;
 using eShop.UseCases.ViewProductScreen;
 using Microsoft.AspNetCore.Components;
@@ -19,6 +20,7 @@ using eShop.UseCases.AdminPortal.OutstandingOrdersScreen;
 using eShop.UseCases.AdminPortal.OrderDetailScreen.Interfaces;
 using eShop.UseCases.AdminPortal.OrderDetailScreen;
 using eShop.UseCases.AdminPortal.ProcessedOrdersScreen;
+using eShop.DataStore.SQL.Dapper.Helpers;
 
 namespace eShop.Web
 {
@@ -40,14 +42,19 @@ namespace eShop.Web
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
-            builder.Services.AddSingleton<IProductRepository, ProductRepsitory>();
-			builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
+   //         builder.Services.AddSingleton<IProductRepository, ProductRepository>();
+			//builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
 
 			builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
             builder.Services.AddScoped<IShoppingCart, eShop.ShoppingCart.LoaclStorage.ShoppingCart>();
             builder.Services.AddScoped<IShoppingCartStateStore, ShoppingCartStateStore>();
+
+            builder.Services.AddTransient<IDataAccess>(sp => new DataAccess(builder.Configuration.GetConnectionString("Default")));
+			builder.Services.AddTransient<IProductRepository, ProductRepository>();
+			builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+
 
 			builder.Services.AddTransient<IOrderService, OrderService>();
 			builder.Services.AddTransient<IViewProductUseCase, ViewProductUseCase>();
